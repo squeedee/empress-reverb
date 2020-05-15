@@ -26,11 +26,10 @@
 
     border-radius: 50%;
     border: double 4px transparent;
-    background-image: radial-gradient(100% 90%, #ffffff 1%, #d2d2d2 35%, #3f3f3f 100%),
-        linear-gradient(130deg, #808080, #ffffff, #808080, #ffffff);
+    background-image: radial-gradient(100% 90%, #ffffff 1%, #d2d2d2 35%, #3f3f3f 100%), linear-gradient(130deg, #808080, #ffffff, #808080, #ffffff);
     background-origin: border-box;
     background-clip: content-box, border-box;
-    box-shadow: 0 5px 15px 2px black, 0 0 5px 3px black, 0 0 0 12px #444;
+    box-shadow: -10px 15px 10px 0px #111, -14px 15px 20px 1px black;
 }
 
 .knob.inner {
