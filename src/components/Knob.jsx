@@ -1,23 +1,34 @@
-import React from 'react'
+import React, {useState} from 'react'
 import './Knob.css'
 
 const getAngle = (mouseX, mouseY, pts) => {
-    const x = mouseX - pts.x;
-    const y = mouseY - pts.y;
-    let deg = Math.atan(y / x) * 180 / Math.PI;
+    const x = mouseX - pts.x
+    const y = mouseY - pts.y
+    let deg = Math.atan(y / x) * 180 / Math.PI
     if ((x < 0 && y >= 0) || (x < 0 && y < 0)) {
-        deg += 90;
+        deg += 90
     } else {
-        deg += 270;
+        deg += 270
     }
     return deg
-    // return Math.min(Math.max(this.startAngle, deg), this.endAngle);
-};
+}
 
+const clampFn = (low, high) =>
+    v => Math.max(Math.min(v, high), low)
 
-export const Knob = () => {
+const useAngle = (low, high, clamp) => {
+    const [angle, setAngle] = useState(clamp(0))
+
+    return [angle, (angle) => {
+        setAngle(clamp(angle))
+    }]
+}
+
+export const Knob = ({low = 0, high = 360}) => {
+    const clamp = clampFn(low, high)
+    const [angle, setAngle] = useAngle(low,high,clamp)
     const startDrag = e => {
-        e.preventDefault();
+        e.preventDefault()
 
         const knob = e.target.getBoundingClientRect()
         const center = {
@@ -26,10 +37,8 @@ export const Knob = () => {
         }
 
         const dragging = e => {
-                let currentAngle = getAngle(e.clientX, e.clientY, center)
-                console.log(currentAngle)
-                // if (this.currentDeg === this.startAngle) this.currentDeg--
-
+            let currentAngle = getAngle(e.clientX, e.clientY, center)
+            setAngle(currentAngle)
         }
 
         // const moveHandler = e => {
@@ -47,11 +56,11 @@ export const Knob = () => {
         //     this.setState({ deg: this.currentDeg });
         //     this.props.onChange(newValue);
         // };
-        document.addEventListener("mousemove", dragging);
+        document.addEventListener("mousemove", dragging)
         document.addEventListener("mouseup", () => {
             document.removeEventListener("mousemove", dragging)
         })
-    };
+    }
 
 
     return <div className="knob" onMouseDown={startDrag}>
@@ -69,7 +78,7 @@ export const Knob = () => {
         {/*        : null}*/}
         {/*</div>*/}
         <div className="knob outer">
-            <div className="knob inner">
+            <div className="knob inner" style={{transform: `rotate(${angle}deg)`}}>
                 <div className="indicator"/>
             </div>
         </div>
